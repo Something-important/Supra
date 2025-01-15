@@ -1,0 +1,26 @@
+{
+  "name": "supra",
+  "version": "1.0.0",
+  "description": "testing",
+  "main": "index.js",
+  "scripts": {
+    "tsc": "tsc src/index.ts",
+    "node": "node src/index.js",
+    "start": "ts-node src/index.ts",
+    "supra": "ts-node src/supra.ts",
+    "seed": "ts-node src/seed.ts",
+    "client": "ts-node src/client.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "@aptos-labs/ts-sdk": "^1.33.1",
+    "bip39": "^3.1.0",
+    "supra-l1-sdk": "^3.1.0"
+  }
+}
