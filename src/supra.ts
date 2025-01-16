@@ -80,7 +80,7 @@ async function transferCoins(path:string, mnemonic:string, recipient:string, amo
     account,
     recipientAddress,
     BigInt(amount),
-    coinType,
+    coinType
   );
   console.log("txn:", txn);
 }
@@ -93,7 +93,11 @@ async function initDeploy(path?:string, mnemonic?:string, privateKey?:Uint8Array
   let args: Uint8Array[] = [];
   const rawTxn = await client.createSerializedRawTxObject(account.address(),BigInt(10),account.address().toString(),'micropayment','init_deploy',fargs,args);
   console.log("rawTxn:", rawTxn);
-  const result = await client.sendTxUsingSerializedRawTransaction(account,rawTxn);
+  const result = await client.sendTxUsingSerializedRawTransaction(account,rawTxn,
+  {
+    enableTransactionSimulation: true,
+    enableWaitForTransaction: true,
+  });
   console.log("result:", result);
 
 }
@@ -109,7 +113,7 @@ async function createChannel(path?:string, mnemonic?:string, privateKey?:Uint8Ar
     // TxnBuilderTypes.TransactionArgumentAddress,  // Argument type for address
     // TxnBuilderTypes.TypeTag.      // Argument type for u64 (amount)
   ];
-  let fArgs: Uint8Array[] = [merch.address().toUint8Array(),BCS.bcsSerializeUint64(10000),BCS.bcsSerializeUint64(10000),BCS.bcsSerializeStr('9c8401a28be16654631911f6db21ba0b374d13108578462f7426995d7a006050')];
+  let fArgs: Uint8Array[] = [merch.address().toUint8Array(),BCS.bcsSerializeUint64(10000),BCS.bcsSerializeUint64(10000),BCS.bcsSerializeStr('0x9c8401a28be16654631911f6db21ba0b374d13108578462f7426995d7a006050')];
   const rawTxn = await client.createSerializedRawTxObject(account.address(),
   ( await client.getAccountInfo(account.address())).sequence_number
   ,account.address().toString(),'micropayment','create_channel',functionArgumentTypes,fArgs);
@@ -132,12 +136,17 @@ async function closeChannel(path?:string, mnemonic?:string, privateKey?:Uint8Arr
     // TxnBuilderTypes.TransactionArgumentAddress,  // Argument type for address
     // TxnBuilderTypes.TypeTag.      // Argument type for u64 (amount)
   ];
-  let fArgs: Uint8Array[] = [BCS.bcsSerializeStr('4a2a1b705685a31066c631974bf373df7ff95a375231f756a1af63253026e01b'),BCS.bcsSerializeUint64(2),BCS.bcsSerializeUint64(2)];
+  let fArgs: Uint8Array[] = [BCS.bcsSerializeStr('4f778d05cc17201522947b0a7f80b56ef0a4922bac573fe3cffac032e12ce5ba'),BCS.bcsSerializeUint64(91),BCS.bcsSerializeUint64(3)];
   const rawTxn = await client.createSerializedRawTxObject(merch.address(),
     ( await client.getAccountInfo(merch.address())).sequence_number
     ,account.address().toString(),'micropayment','redeem_channel',functionArgumentTypes,fArgs);
   console.log("rawTxn:", rawTxn);
-  const result = await client.sendTxUsingSerializedRawTransaction(merch,rawTxn);
+  const result = await client.sendTxUsingSerializedRawTransaction(merch,rawTxn,
+    {
+      enableTransactionSimulation: true,
+      enableWaitForTransaction: true,
+    }
+  );
   console.log("result:", result);
 }
 
